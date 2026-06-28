@@ -1,40 +1,51 @@
-import java.util.ArrayList;
-
 public class Heap {
-    private ArrayList<Integer> heap;
+    private int[] heap;
+    private int size;
 
-    public Heap() {
-        this.heap = new ArrayList<Integer>();
+    public Heap(int capacity) {
+        this.heap = new int[capacity];
+        this.size = 0;
     }
 
     public void insert(int value) {
-        heap.add(value);
-        int index = heap.size() - 1;
+        int index = size;
+        heap[size++] = value;
         while (index > 0) {
             int parentIndex = (index - 1) / 2;
-            if (heap.get(index) <= heap.get(parentIndex)) {
+            if (heap[index] <= heap[parentIndex]) {
                 break;
             }
-            int temp = heap.get(index);
-            heap.set(index, heap.get(parentIndex));
-            heap.set(parentIndex, temp);
+
+            int temp = heap[index];
+            heap[index] = heap[parentIndex];
+            heap[parentIndex] = temp;
             index = parentIndex;
         }
     }
 
     public int remove() {
-        if (heap.size() == 0) {
-            throw new RuntimeException("Queue is empty");
+        int removedValue = heap[0];
+        int last = heap[--size];
+        if (size > 0) {
+            heap[0] = last;
+            heapify(0, size);
         }
 
-        int removedValue = heap.get(0);
-        heap.remove(0);
-        heapify(0, heap.size());
         return removedValue;
     }
 
     public int size() {
-        return heap.size();
+        return size;
+    }
+
+    public boolean isSorted() {
+        for (int i = 0; i < size - 1; i++) {
+            if (heap[i] < heap[i + 1]) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private void heapify(int i, int n) {
@@ -42,18 +53,18 @@ public class Heap {
         int l = 2 * i + 1;
         int r = 2 * i + 2;
 
-        if (l < n && heap.get(l) > heap.get(largest))
+        if (l < n && heap[l] > heap[largest])
             largest = l;
 
-        if (r < n && heap.get(r) > heap.get(largest))
+        if (r < n && heap[r] > heap[largest])
             largest = r;
 
         if (largest != i) {
-            int swap = heap.get(i);
-            heap.set(i, heap.get(largest));
-            heap.set(largest, swap);
+            int swap = heap[i];
+            heap[i] = heap[largest];
+            heap[largest] = swap;
 
-            heapify(n, largest);
+            heapify(largest, n);
         }
     }
 }

@@ -20,7 +20,7 @@ class SortedPriorityQueue
 
     public SortedPriorityQueue(int capacity) {
         this.capacity = capacity;
-        this.heap = new Heap();
+        this.heap = new Heap(capacity);
     }
 
     public void add(int value) {
@@ -38,5 +38,13 @@ class SortedPriorityQueue
         }
 
         return heap.remove();
+    }
+
+    public boolean isSorted() {
+        return heap.isSorted();
+    }
+
+    public int size() {
+        return heap.size();
     }
 }
