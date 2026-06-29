@@ -6,14 +6,22 @@ import java.util.PriorityQueue;
 
 class Homework3
 {
+    static private void printHelp() {
+        System.out.println("Usage: Please select SPQ for Sorted Priority Queue or PQ for Priority Queue\njava -cp bin Homework SPQ\njava -cp bin Homework PQ\n");
+    }
+
     public static void main(String[] args) {
         if(args.length == 0){
-           System.out.println("Usage: Please select SPQ for Sorted Priority Queue or PQ for Priority Queue\njava -cp bin Homework SPQ\njava -cp bin Homework PQ\n");
+            printHelp();
         } else {
-            if (args[0].equals("PQ"))
+            if (args[0].toUpperCase().equals("PQ"))
                 RunPQTest();
-            else if(args[0].equals("SPQ"))
+            else if(args[0].toUpperCase().equals("SPQ"))
                 RunSPQTest();
+            else {
+                System.err.println("Invalid Option : "+ args[0]);
+                printHelp();
+            }
         }
     }
 
@@ -42,8 +50,8 @@ class Homework3
         for (int n : sizes) {
             int trials = n < 1000 ? 1000 : 10;
             long total = 0;
+            int[] input = randomArray(n);
             for (int t = 0; t < trials; t++) {
-                int[] input = randomArray(n);
                 long start = System.nanoTime();
                 PriorityQueue<Integer> queue = new PriorityQueue<>(input.length);
                 sort(queue, input);
@@ -68,8 +76,8 @@ class Homework3
         for (int n : sizes) {
             int trials = n < 1000 ? 1000 : 10;
             long total = 0;
+            int[] input = randomArray(n);
             for (int t = 0; t < trials; t++) {
-                int[] input = randomArray(n);
                 long start = System.nanoTime();
                 SortedPriorityQueue queue = new SortedPriorityQueue(input.length);
                 sort(queue, input);
