@@ -1,12 +1,12 @@
 all: Project1
 
-Project1: bin/Registration.class
+Project1: bin/Project.class
 
-bin/Registration.class: bin/MyFrame.class src/Registration.java
-	javac -d bin -cp bin src/Registration.java
+bin/Project.class: bin/Report.class src/Project.java
+	javac -d bin -cp bin src/Project.java
 
-bin/MyFrame.class: src/MyFrame.java
-	javac -d bin src/MyFrame.java
+bin/Report.class: src/Report.java
+	javac -d bin src/Report.java
 
 clean:
 	rm -rf bin

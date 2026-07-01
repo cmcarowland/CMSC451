@@ -1,7 +1,7 @@
-class Registration {
+class Project {
 
     public static void main(String[] args) throws Exception
     {
-        MyFrame f = new MyFrame();
+        Report f = new Report();
     }
 }
