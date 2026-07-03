@@ -6,8 +6,14 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Arrays;
 
 class Report extends JFrame {
+
+    public static void main(String[] args) throws Exception
+    {
+        Report f = new Report();
+    }
 
     private static final String[] COLUMN_NAMES = {
         "Size",
@@ -24,8 +30,8 @@ class Report extends JFrame {
 
     public Report()
     {
-        setTitle("Project 1 - Report");
-        setBounds(300, 90, 900, 600);
+        setTitleWithFileName();
+        setBounds(300, 90, 400, 275);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setResizable(false);
 
@@ -51,6 +57,11 @@ class Report extends JFrame {
         setVisible(true);
     }
 
+    private void setTitleWithFileName()
+    {
+        setTitle("Project 1 - Report " + (selectedFile == null ? "" : "(" + selectedFile.getName() + ")"));
+    }
+
     private JMenuBar buildMenuBar()
     {
         JMenuBar menuBar = new JMenuBar();
@@ -59,6 +70,10 @@ class Report extends JFrame {
         JMenuItem loadItem = new JMenuItem("Load");
         loadItem.addActionListener(e -> loadFile());
         fileMenu.add(loadItem);
+
+        JMenuItem closeItem = new JMenuItem("Close Report");
+        closeItem.addActionListener(e -> close());
+        fileMenu.add(closeItem);
 
         JMenuItem exitItem = new JMenuItem("Exit");
         exitItem.addActionListener(e -> System.exit(0));
@@ -74,47 +89,60 @@ class Report extends JFrame {
         int result = chooser.showOpenDialog(this);
         if (result == JFileChooser.APPROVE_OPTION) {
             selectedFile = chooser.getSelectedFile();
-            populateTable(selectedFile);
+            setTitleWithFileName();
+            readFile(selectedFile);
         }
     }
 
-    private void populateTable(File file)
+    private void close()
     {
         tableModel.setRowCount(0);
+        selectedFile = null;
+        setTitleWithFileName();
+    }
+
+    private void readFile(File file)
+    {
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
+            tableModel.setRowCount(0);
             while ((line = reader.readLine()) != null) {
                 line = line.trim();
                 if (line.isEmpty())
                     continue;
 
-                String[] tokens = line.split("\\s+");
-                int n = Integer.parseInt(tokens[0]);
-                int pairCount = (tokens.length - 1) / 2;
-
-                double[] counts = new double[pairCount];
-                double[] times = new double[pairCount];
-                int countIndex = 0;
-                for (int i = 1; i < tokens.length; i += 2) {
-                    counts[countIndex] = Double.parseDouble(tokens[i]);
-                    times[countIndex] = Double.parseDouble(tokens[i + 1]);
-                    countIndex++;
-                }
-
-                double countAvg = average(counts);
-                double timeAvg = average(times);
-
-                tableModel.addRow(new Object[] {
-                    n,
-                    String.format("%.2f", countAvg),
-                    String.format("%.2f%%", coefficientOfVariation(counts, countAvg)),
-                    String.format("%.2f", timeAvg),
-                    String.format("%.2f%%", coefficientOfVariation(times, timeAvg))
-                });
+                populateTable(line);
             }
         } catch (IOException e) {
             System.err.println("Failed to read file: " + e.getMessage());
         }
+    }
+
+    private void populateTable(String line)
+    {
+        String[] tokens = line.split("\\s+");
+        int n = Integer.parseInt(tokens[0]);
+        int pairCount = (tokens.length - 1) / 2;
+
+        double[] counts = new double[pairCount];
+        double[] times = new double[pairCount];
+        int countIndex = 0;
+        for (int i = 1; i < tokens.length; i += 2) {
+            counts[countIndex] = Double.parseDouble(tokens[i]);
+            times[countIndex] = Double.parseDouble(tokens[i + 1]);
+            countIndex++;
+        }
+
+        double countAvg = average(counts);
+        double timeAvg = average(times);
+
+        tableModel.addRow(new Object[] {
+            n,
+            String.format("%.2f", countAvg),
+            String.format("%.2f%%", coefficientOfVariation(counts, countAvg)),
+            String.format("%.2f", timeAvg),
+            String.format("%.2f%%", coefficientOfVariation(times, timeAvg))
+        });
     }
 
     private double average(double[] values)
@@ -123,7 +151,7 @@ class Report extends JFrame {
         for (double v : values)
             sum += v;
 
-        System.out.println("Sum: " + sum + ", Length: " + values.length + ", Average: " + (sum / values.length));
+        // System.out.println("Sum: " + sum + ", Length: " + values.length + ", Average: " + (sum / values.length));
         return sum / values.length;
     }
 
@@ -132,6 +160,7 @@ class Report extends JFrame {
         double variance = 0;
         for (double v : values)
             variance += (v - mean) * (v - mean);
+
         variance /= values.length;
 
         double stdDev = Math.sqrt(variance);
