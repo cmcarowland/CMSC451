@@ -22,9 +22,9 @@ class Report extends JFrame {
                 JOptionPane.showMessageDialog(null, "The specified file does not exist or is not a valid file.", "File Not Found", JOptionPane.WARNING_MESSAGE);
                 fileName = "";
             }
-            Report f = new Report(fileName);
+            new Report(fileName);
         } else {
-            Report f = new Report("");
+            new Report("");
         }
     }
 
