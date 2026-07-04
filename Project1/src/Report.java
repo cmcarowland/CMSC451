@@ -6,13 +6,26 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Arrays;
 
 class Report extends JFrame {
-
+    private Container c;
+    private File selectedFile;
+    private DefaultTableModel tableModel;
+    private JTable table;
+    
     public static void main(String[] args) throws Exception
     {
-        Report f = new Report();
+        if(args.length > 0) {
+            String fileName = args[0];
+            File file = new File(fileName);
+            if (!file.exists() || !file.isFile()) {
+                JOptionPane.showMessageDialog(null, "The specified file does not exist or is not a valid file.", "File Not Found", JOptionPane.WARNING_MESSAGE);
+                fileName = "";
+            }
+            Report f = new Report(fileName);
+        } else {
+            Report f = new Report("");
+        }
     }
 
     private static final String[] COLUMN_NAMES = {
@@ -23,12 +36,8 @@ class Report extends JFrame {
         "Coef Time"
     };
 
-    private Container c;
-    private File selectedFile;
-    private DefaultTableModel tableModel;
-    private JTable table;
 
-    public Report()
+    public Report(String fileName)
     {
         setTitleWithFileName();
         setBounds(300, 90, 400, 275);
@@ -55,6 +64,12 @@ class Report extends JFrame {
         setJMenuBar(buildMenuBar());
 
         setVisible(true);
+        if (!fileName.isEmpty()) {
+            selectedFile = new File(fileName);
+            readFile(selectedFile);
+        } else {
+            loadFile();
+        }
     }
 
     private void setTitleWithFileName()
