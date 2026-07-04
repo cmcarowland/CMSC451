@@ -8,15 +8,19 @@ import java.io.FileReader;
 import java.io.IOException;
 
 class Report extends JFrame {
-
+    private Container c;
+    private File selectedFile;
+    private DefaultTableModel tableModel;
+    private JTable table;
+    
     public static void main(String[] args) throws Exception
     {
         if(args.length > 0) {
             String fileName = args[0];
             File file = new File(fileName);
             if (!file.exists() || !file.isFile()) {
-                System.err.println("File not found: " + fileName);
-                System.exit(1);
+                JOptionPane.showMessageDialog(null, "The specified file does not exist or is not a valid file.", "File Not Found", JOptionPane.WARNING_MESSAGE);
+                fileName = "";
             }
             Report f = new Report(fileName);
         } else {
@@ -32,10 +36,6 @@ class Report extends JFrame {
         "Coef Time"
     };
 
-    private Container c;
-    private File selectedFile;
-    private DefaultTableModel tableModel;
-    private JTable table;
 
     public Report(String fileName)
     {
