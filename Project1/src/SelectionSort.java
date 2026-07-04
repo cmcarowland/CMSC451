@@ -8,7 +8,6 @@ public class SelectionSort extends SortAbstract
     @Override 
     public void sort(int[] array)
     {
-        System.out.println("Selection Sort");
         startSort();
         int n = array.length;
         for (int i = 0; i < n - 1; i++) {
