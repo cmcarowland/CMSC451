@@ -63,13 +63,15 @@ class Report extends JFrame {
 
         setJMenuBar(buildMenuBar());
 
-        setVisible(true);
         if (!fileName.isEmpty()) {
             selectedFile = new File(fileName);
+            setTitleWithFileName();
             readFile(selectedFile);
         } else {
             loadFile();
         }
+
+        setVisible(true);
     }
 
     private void setTitleWithFileName()
