@@ -1,39 +1,34 @@
 
 public class InsertionSort extends SortAbstract
 {
+    /*
+    Insertion sort
+    Found at: https://www.geeksforgeeks.org/dsa/insertion-sort-algorithm/
+    */
     @Override 
     public void sort(int[] array)
     {
         System.out.println("Insertion Sort");
-    }
+        startSort();
+        int n = array.length;
+        for (int i = 1; i < n; ++i) {
+            int key = array[i];
+            int j = i - 1;
 
-    @Override
-    protected void startSort()
-    {
+            /* Move elements of array[0..i-1], that are
+               greater than key, to one position ahead
+               of their current position */
+            while (j >= 0) { 
+                addToCount();
+                if(array[j] <= key) 
+                    break;
+                
+                array[j + 1] = array[j];
+                j = j - 1;
+            }
 
-    }
-
-    @Override
-    protected void endSort()
-    {
-
-    }
-
-    @Override
-    protected void addToCount()
-    {
-
-    }
-
-    @Override
-    public int getCount()
-    {
-        return 0;
-    }
-
-    @Override
-    public long getTime()
-    {
-        return 0;
+            array[j + 1] = key;
+        }
+        endSort();
     }
 }
