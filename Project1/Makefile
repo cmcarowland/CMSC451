@@ -5,7 +5,7 @@ Project1: bin/Report.class bin/Benchmark.class
 bin/Report.class: src/Report.java
 	javac -d bin src/Report.java
 
-bin/Benchmark.class: src/Benchmark.java bin/InsertionSort.class bin/SelectionSort.class bin/QuickSort.class
+bin/Benchmark.class: src/Benchmark.java bin/InsertionSort.class bin/SelectionSort.class bin/QuickSort.class bin/UnsortedException.class
 	javac -d bin -cp bin src/Benchmark.java
 
 bin/InsertionSort.class: src/InsertionSort.java bin/SortAbstract.class
@@ -16,6 +16,9 @@ bin/SelectionSort.class: src/SelectionSort.java bin/SortAbstract.class
 
 bin/QuickSort.class: src/QuickSort.java bin/SortAbstract.class
 	javac -d bin -cp bin src/QuickSort.java
+
+bin/UnsortedException.class: src/UnsortedException.java
+	javac -d bin src/UnsortedException.java
 
 bin/SortAbstract.class: src/SortAbstract.java
 	javac -d bin src/SortAbstract.java
