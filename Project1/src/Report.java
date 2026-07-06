@@ -1,3 +1,10 @@
+/*
+Raymond Rowland
+06 Jul 26
+CMSC 451 Project 1
+Report.java
+*/
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -102,7 +109,7 @@ class Report extends JFrame {
 
     private void loadFile()
     {
-        JFileChooser chooser = new JFileChooser("/workspaces/CMSC451/Project1");
+        JFileChooser chooser = new JFileChooser();
         int result = chooser.showOpenDialog(this);
         if (result == JFileChooser.APPROVE_OPTION) {
             selectedFile = chooser.getSelectedFile();

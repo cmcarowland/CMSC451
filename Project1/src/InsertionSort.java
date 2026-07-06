@@ -1,10 +1,13 @@
+/*
+Raymond Rowland
+06 Jul 26
+CMSC 451 Project 1
+InsertionSort.java
+Found at: https://www.geeksforgeeks.org/dsa/insertion-sort-algorithm/
+*/
 
 public class InsertionSort extends SortAbstract
 {
-    /*
-    Insertion sort
-    Found at: https://www.geeksforgeeks.org/dsa/insertion-sort-algorithm/
-    */
     @Override 
     public void sort(int[] array)
     {

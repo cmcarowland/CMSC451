@@ -1,4 +1,9 @@
-
+/*
+Raymond Rowland
+06 Jul 26
+CMSC 451 Project 1
+SortAbstract.java
+*/
 
 public abstract class SortAbstract
 {
