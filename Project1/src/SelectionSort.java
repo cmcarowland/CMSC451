@@ -1,14 +1,15 @@
-
+/*
+Raymond Rowland
+06 Jul 26
+CMSC 451 Project 1
+SelectionSort.java
+Found at: https://www.geeksforgeeks.org/dsa/selection-sort-algorithm-2/
+*/
 public class SelectionSort extends SortAbstract
 {
-    /*
-    Selection sort 
-    Found at: https://www.geeksforgeeks.org/dsa/selection-sort-algorithm-2/
-    */
     @Override 
     public void sort(int[] array)
     {
-        System.out.println("Selection Sort");
         startSort();
         int n = array.length;
         for (int i = 0; i < n - 1; i++) {
