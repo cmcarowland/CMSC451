@@ -1,30 +1,30 @@
 all: Project1
 
-Project1: bin/Report.class bin/Benchmark.class
+Project1: Report.class Benchmark.class
 
-bin/Report.class: src/Report.java
-	javac -d bin src/Report.java
+Report.class: Report.java
+	javac Report.java
 
-bin/Benchmark.class: src/Benchmark.java bin/InsertionSort.class bin/SelectionSort.class bin/QuickSort.class bin/UnsortedException.class bin/SortFactory.class
-	javac -d bin -cp bin src/Benchmark.java
+Benchmark.class: Benchmark.java InsertionSort.class SelectionSort.class QuickSort.class UnsortedException.class SortFactory.class
+	javac Benchmark.java
 
-bin/InsertionSort.class: src/InsertionSort.java bin/SortAbstract.class
-	javac -d bin -cp bin src/InsertionSort.java
+InsertionSort.class: InsertionSort.java SortAbstract.class UnsortedException.class
+	javac InsertionSort.java
 
-bin/SelectionSort.class: src/SelectionSort.java bin/SortAbstract.class
-	javac -d bin -cp bin src/SelectionSort.java
+SelectionSort.class: SelectionSort.java SortAbstract.class UnsortedException.class
+	javac SelectionSort.java
 
-bin/QuickSort.class: src/QuickSort.java bin/SortAbstract.class
-	javac -d bin -cp bin src/QuickSort.java
+QuickSort.class: QuickSort.java SortAbstract.class
+	javac QuickSort.java
 
-bin/UnsortedException.class: src/UnsortedException.java
-	javac -d bin src/UnsortedException.java
+UnsortedException.class: UnsortedException.java
+	javac UnsortedException.java
 
-bin/SortAbstract.class: src/SortAbstract.java
-	javac -d bin src/SortAbstract.java
+SortAbstract.class: SortAbstract.java UnsortedException.class
+	javac SortAbstract.java
 
-bin/SortFactory.class: src/SortFactory.java bin/SortAbstract.class
-	javac -d bin -cp bin src/SortFactory.java
+SortFactory.class: SortFactory.java SortAbstract.class
+	javac SortFactory.java
 
 clean:
-	rm -rf bin
+	rm *.class

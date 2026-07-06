@@ -10,6 +10,7 @@ public abstract class SortAbstract
     protected int count;
     protected long startTime;
     protected long elapsedTime;
+    protected int[] array;
 
     abstract public void sort(int[] array);
     
@@ -37,5 +38,16 @@ public abstract class SortAbstract
     public long getTime()
     {
         return elapsedTime;
+    }
+
+    public void validateSort() throws UnsortedException
+    {
+        for (int i = 0; i < array.length - 1; i++)
+        {
+            if (array[i] > array[i + 1])
+            {
+                throw new UnsortedException("Array is not sorted");
+            }
+        }
     }
 }
