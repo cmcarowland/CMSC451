@@ -28,4 +28,3 @@ SortFactory.class: SortFactory.java SortAbstract.class
 
 clean:
 	rm *.class
-	rm *.txt

@@ -32,7 +32,7 @@ javac Benchmark.java
 ```
 
 Options
-- Clean - removes build artifacts and output files (*.txt!)
+- Clean - removes build artifacts
 - All - Builds Report and Benchmark code
 - Benchmark - builds .class files required for Benchmark
 - Report - builds .class files required for Report
