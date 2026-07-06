@@ -7,29 +7,48 @@ Built and tested with:
 - openjdk 21.0.11 2026-04-21 LTS
 - OpenJDK Runtime Environment Microsoft-13877187 (build 21.0.11+10-LTS)
 
+| Resource | Stats |
+| -- | -- |
+| CPUs | 2 (1 core, 2 threads — hyperthreaded, not physical cores) |
+|CPU model | AMD EPYC 7763, virtualized under Microsoft Hyper-V (Azure) |
+| RAM |	7.8Gi total, 4.9Gi available |
+| Swap | 0B (none configured) | 
+| Java | OpenJDK 21.0.11 |
+
 ## Build
 
 Call make from the top level folder to build all
 
 ```
 $ make
-javac -d bin src/Report.java
-javac -d bin src/SortAbstract.java
-javac -d bin -cp bin src/InsertionSort.java
-javac -d bin -cp bin src/SelectionSort.java
-javac -d bin -cp bin src/QuickSort.java
-javac -d bin src/UnsortedException.java
-javac -d bin -cp bin src/SortFactory.java
-javac -d bin -cp bin src/Benchmark.java
+javac Report.java
+javac UnsortedException.java
+javac SortAbstract.java
+javac InsertionSort.java
+javac SelectionSort.java
+javac QuickSort.java
+javac SortFactory.java
+javac Benchmark.java
 ```
 
 Options
-- Clean - removes build artifacts
+- Clean - removes build artifacts and output files (*.txt!)
 - All - Builds Report and Benchmark code
 - Benchmark - builds .class files required for Benchmark
 - Report - builds .class files required for Report
 
 ## Usage
 
-java Benchmark
-java Report
+`java Benchmark`
+
+Benchmark will create one file for each algorithm. InsertionSort.txt and SelectionSort.txt will be generated when the benchmark program is run.
+
+`java Report`
+
+Pass --auto to Benchmark to open reports for each algorithm automatically.
+
+`java Benchmark --auto`
+
+Pass a filename to Report to open it straight into the table
+
+`java Report SelectionSort.txt`

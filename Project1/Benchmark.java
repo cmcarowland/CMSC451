@@ -27,6 +27,7 @@ class Benchmark
             warmup(selSort, size);
             warmup(insertSort, size);
         }
+        System.gc();
         
         try (PrintWriter selOut = new PrintWriter(new FileWriter("SelectionSort.txt"));
         PrintWriter insOut = new PrintWriter(new FileWriter("InsertionSort.txt")))
@@ -67,22 +68,22 @@ class Benchmark
     {
         try {
 
-            ProcessBuilder pb = new ProcessBuilder("java", "-cp", "bin", "Report", fileName);
+            ProcessBuilder pb = new ProcessBuilder("java", "Report", fileName);
 
             pb.redirectOutput(ProcessBuilder.Redirect.DISCARD);
             pb.redirectError(ProcessBuilder.Redirect.DISCARD);
-
-            Process process = pb.start();
+            pb.start();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    static long[] runTest(SortFactory factory, int[] array)
+    static long[] runTest(SortFactory factory, int[] array) throws UnsortedException
     {
         long[] results = new long[2];
         SortAbstract absSort = factory.create();
         absSort.sort(array);
+        absSort.validateSort();
         results[0] = (long)absSort.getCount();
         results[1] = absSort.getTime();
 
@@ -128,18 +129,5 @@ class Benchmark
             array[i] = array[j];
             array[j] = temp;
         }
-    }
-
-    static public void validateSort(int[] array) throws UnsortedException
-    {
-        for (int i = 0; i < array.length - 1; i++)
-        {
-            if (array[i] > array[i + 1])
-            {
-                System.out.println("Array is not sorted");
-                throw new UnsortedException("Array is not sorted");
-            }
-        }
-        System.out.println("Array is sorted");
     }
 }

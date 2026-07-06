@@ -11,6 +11,7 @@ public class InsertionSort extends SortAbstract
     @Override 
     public void sort(int[] array)
     {
+        this.array = array;
         startSort();
         int n = array.length;
         for (int i = 1; i < n; ++i) {
