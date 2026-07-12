@@ -6,11 +6,12 @@ class Node:
         self.edges = []
         self.pre = None
         self.post = None
+        self.in_degree = 0
 
     def __repr__(self):
-        out = self.name + '\n'
-        for edge in self.edges:
-            out += f'└> {edge.end.name}\n'
+        out = self.name
+        # for edge in self.edges:
+        #     out += f'└> {edge.end.name}\n'
         return out
 
 class Edge:
@@ -26,6 +27,14 @@ class Graph:
     def __init__(self, root : Node | None = None):
         self.root = root
         self.nodes = {}
+
+    def order_nodes(self):
+        return sorted(self.nodes.values(), key=lambda node: node.post, reverse=True)
+    
+    def calculate_in_degree(self):
+        for node in self.nodes.values():
+            for edge in node.edges:
+                edge.end.in_degree += 1
     
     @staticmethod
     def load(fileName : str):
