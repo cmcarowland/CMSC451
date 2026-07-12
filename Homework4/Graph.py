@@ -29,12 +29,30 @@ class Graph:
         self.nodes = {}
 
     def order_nodes(self):
-        return sorted(self.nodes.values(), key=lambda node: node.post, reverse=True)
+        return sorted(self.nodes, key=lambda name: self.nodes[name].post, reverse=True)
     
     def calculate_in_degree(self):
         for node in self.nodes.values():
             for edge in node.edges:
                 edge.end.in_degree += 1
+
+    def transpose(self):
+        transposed = Graph()
+
+        for name in self.nodes:
+            transposed.nodes[name] = Node(name)
+
+        for node in self.nodes.values():
+            for edge in node.edges:
+                new_start = transposed.nodes[edge.end.name]
+                new_end = transposed.nodes[edge.start.name]
+                new_start.edges.append(Edge(new_start, new_end, edge.directed))
+
+        for node in transposed.nodes.values():
+            node.edges.sort(key=lambda e: e.end.name)
+
+        transposed.root = transposed.nodes[self.root.name]
+        return transposed
     
     @staticmethod
     def load(fileName : str):
