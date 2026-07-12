@@ -4,6 +4,8 @@ class Node:
     def __init__(self, name):
         self.name = name
         self.edges = []
+        self.pre = None
+        self.post = None
 
     def __repr__(self):
         out = self.name + '\n'
@@ -16,6 +18,9 @@ class Edge:
         self.start = start
         self.end = end
         self.directed = directed
+
+    def __repr__(self):
+        return f'{self.start.name} -> {self.end.name}'
 
 class Graph:
     def __init__(self, root : Node | None = None):
