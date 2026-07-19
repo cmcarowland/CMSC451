@@ -1,0 +1,287 @@
+<title>Graph 4 — Hand-Drawing Layout</title>
+<style>
+  :root {
+    --paper: #eef1f6;
+    --grid-line: #d7deea;
+    --ink: #1a2233;
+    --ink-soft: #4b5568;
+    --node-fill: #ffffff;
+    --node-stroke: #1a2233;
+    --edge-ink: #1a2233;
+    --edge-accent: #2856c7;
+    --badge-bg: #ffffff;
+    --badge-ink: #b5540a;
+    --badge-border: #e3c7a8;
+    --rule: #c7cfdc;
+  }
+  :root[data-theme="dark"] {
+    --paper: #12161d;
+    --grid-line: #222937;
+    --ink: #e7ebf2;
+    --ink-soft: #9aa5b8;
+    --node-fill: #1b202b;
+    --node-stroke: #c7cfdc;
+    --edge-ink: #c7cfdc;
+    --edge-accent: #6ea8ff;
+    --badge-bg: #1b202b;
+    --badge-ink: #ffb454;
+    --badge-border: #4a3a22;
+    --rule: #2a3140;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12161d;
+      --grid-line: #222937;
+      --ink: #e7ebf2;
+      --ink-soft: #9aa5b8;
+      --node-fill: #1b202b;
+      --node-stroke: #c7cfdc;
+      --edge-ink: #c7cfdc;
+      --edge-accent: #6ea8ff;
+      --badge-bg: #1b202b;
+      --badge-ink: #ffb454;
+      --badge-border: #4a3a22;
+      --rule: #2a3140;
+    }
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 28px 28px;
+    color: var(--ink);
+    font-family: ui-sans-serif, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: 48px 20px 72px;
+  }
+
+  main {
+    width: 100%;
+    max-width: 760px;
+  }
+
+  header {
+    margin-bottom: 8px;
+  }
+
+  .eyebrow {
+    font-family: ui-monospace, "SF Mono", "Cascadia Code", Consolas, monospace;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  h1 {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin: 4px 0 4px;
+    text-wrap: balance;
+  }
+
+  .sub {
+    color: var(--ink-soft);
+    font-size: 14.5px;
+    line-height: 1.5;
+    max-width: 62ch;
+    margin: 0 0 28px;
+  }
+
+  figure {
+    margin: 0 0 20px;
+    background: var(--node-fill);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 8px;
+  }
+
+  svg { display: block; width: 100%; height: auto; }
+
+  text.node-label {
+    font-family: ui-monospace, "SF Mono", "Cascadia Code", Consolas, monospace;
+    font-weight: 700;
+    font-size: 24px;
+    fill: var(--ink);
+    text-anchor: middle;
+    dominant-baseline: central;
+  }
+
+  .weight-text {
+    font-family: ui-monospace, "SF Mono", "Cascadia Code", Consolas, monospace;
+    font-size: 15px;
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    fill: var(--badge-ink);
+    text-anchor: middle;
+    dominant-baseline: central;
+  }
+
+  .legend {
+    display: flex;
+    gap: 22px;
+    flex-wrap: wrap;
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin: 0 0 30px;
+  }
+  .legend span { display: inline-flex; align-items: center; gap: 7px; }
+  .swatch { width: 22px; height: 3px; border-radius: 2px; display: inline-block; }
+
+  h2 {
+    font-size: 15px;
+    letter-spacing: 0.02em;
+    margin: 34px 0 10px;
+    border-top: 1px solid var(--rule);
+    padding-top: 22px;
+  }
+
+  ol.steps {
+    margin: 0;
+    padding-left: 20px;
+    line-height: 1.65;
+    font-size: 14.5px;
+  }
+  ol.steps li { margin-bottom: 6px; }
+  ol.steps b { color: var(--ink); }
+
+  .table-wrap { overflow-x: auto; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+    margin-top: 4px;
+  }
+  th, td {
+    text-align: left;
+    padding: 7px 10px;
+    border-bottom: 1px solid var(--rule);
+  }
+  th {
+    font-size: 11.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-soft);
+    font-weight: 600;
+  }
+  td.num {
+    font-family: ui-monospace, "SF Mono", "Cascadia Code", Consolas, monospace;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+  }
+  td.frame-tag, td.hub-tag {
+    font-family: ui-monospace, "SF Mono", "Cascadia Code", Consolas, monospace;
+    font-size: 11.5px;
+  }
+  td.frame-tag { color: var(--edge-ink); }
+  td.hub-tag { color: var(--edge-accent); }
+</style>
+
+<main>
+  <header>
+    <div class="eyebrow">Homework 5 · Graph 4</div>
+    <h1>A layout with zero edge crossings</h1>
+    <p class="sub">
+      Ten directed edges over six nodes, arranged so every edge can be drawn as a
+      straight line with no crossings. The trick: A, B, F, D form a square, and
+      C and E sit inside it as two hubs.
+    </p>
+  </header>
+
+  <figure>
+    <svg viewBox="0 0 700 610" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow-ink" viewBox="0 0 10 10" refX="8" refY="5"
+                markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="var(--edge-ink)" />
+        </marker>
+        <marker id="arrow-accent" viewBox="0 0 10 10" refX="8" refY="5"
+                markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="var(--edge-accent)" />
+        </marker>
+      </defs>
+
+      <!-- frame edges: the A-B-F-D square -->
+      <g stroke="var(--edge-ink)" stroke-width="2.5" fill="none">
+        <line x1="180" y1="130" x2="504" y2="130" marker-end="url(#arrow-ink)" />
+        <line x1="180" y1="130" x2="180" y2="454" marker-end="url(#arrow-ink)" />
+        <line x1="540" y1="130" x2="540" y2="454" marker-end="url(#arrow-ink)" />
+        <line x1="540" y1="490" x2="216" y2="490" marker-end="url(#arrow-ink)" />
+      </g>
+
+      <!-- hub edges: into/out of C and E -->
+      <g stroke="var(--edge-accent)" stroke-width="2.5" fill="none">
+        <line x1="180" y1="130" x2="377.0" y2="215.65" marker-end="url(#arrow-accent)" />
+        <line x1="540" y1="130" x2="438.5" y2="208.05" marker-end="url(#arrow-accent)" />
+        <line x1="540" y1="490" x2="426.1" y2="262.2" marker-end="url(#arrow-accent)" />
+        <line x1="410" y1="230" x2="329.08" y2="359.47" marker-end="url(#arrow-accent)" />
+        <line x1="180" y1="490" x2="281.5" y2="411.95" marker-end="url(#arrow-accent)" />
+        <line x1="310" y1="390" x2="507.0" y2="475.65" marker-end="url(#arrow-accent)" />
+      </g>
+
+      <!-- weight badges -->
+      <g>
+        <g transform="translate(360,130)"><rect x="-11" y="-13" width="22" height="24" rx="5" fill="var(--badge-bg)" stroke="var(--badge-border)"/><text class="weight-text" y="0">2</text></g>
+        <g transform="translate(180,310)"><rect x="-11" y="-13" width="22" height="24" rx="5" fill="var(--badge-bg)" stroke="var(--badge-border)"/><text class="weight-text" y="0">6</text></g>
+        <g transform="translate(540,310)"><rect x="-11" y="-13" width="22" height="24" rx="5" fill="var(--badge-bg)" stroke="var(--badge-border)"/><text class="weight-text" y="0">1</text></g>
+        <g transform="translate(360,490)"><rect x="-11" y="-13" width="22" height="24" rx="5" fill="var(--badge-bg)" stroke="var(--badge-border)"/><text class="weight-text" y="0">1</text></g>
+
+        <g transform="translate(295,180)"><rect x="-11" y="-13" width="22" height="24" rx="5" fill="var(--badge-bg)" stroke="var(--badge-border)"/><text class="weight-text" y="0">7</text></g>
+        <g transform="translate(475,180)"><rect x="-11" y="-13" width="22" height="24" rx="5" fill="var(--badge-bg)" stroke="var(--badge-border)"/><text class="weight-text" y="0">3</text></g>
+        <g transform="translate(475,360)"><rect x="-11" y="-13" width="22" height="24" rx="5" fill="var(--badge-bg)" stroke="var(--badge-border)"/><text class="weight-text" y="0">3</text></g>
+        <g transform="translate(360,310)"><rect x="-11" y="-13" width="22" height="24" rx="5" fill="var(--badge-bg)" stroke="var(--badge-border)"/><text class="weight-text" y="0">3</text></g>
+        <g transform="translate(245,440)"><rect x="-11" y="-13" width="22" height="24" rx="5" fill="var(--badge-bg)" stroke="var(--badge-border)"/><text class="weight-text" y="0">3</text></g>
+        <g transform="translate(425,440)"><rect x="-11" y="-13" width="22" height="24" rx="5" fill="var(--badge-bg)" stroke="var(--badge-border)"/><text class="weight-text" y="0">1</text></g>
+      </g>
+
+      <!-- nodes -->
+      <g>
+        <g transform="translate(180,130)"><circle r="32" fill="var(--node-fill)" stroke="var(--node-stroke)" stroke-width="2.5"/><text class="node-label">A</text></g>
+        <g transform="translate(540,130)"><circle r="32" fill="var(--node-fill)" stroke="var(--node-stroke)" stroke-width="2.5"/><text class="node-label">B</text></g>
+        <g transform="translate(410,230)"><circle r="32" fill="var(--node-fill)" stroke="var(--node-stroke)" stroke-width="2.5"/><text class="node-label">C</text></g>
+        <g transform="translate(180,490)"><circle r="32" fill="var(--node-fill)" stroke="var(--node-stroke)" stroke-width="2.5"/><text class="node-label">D</text></g>
+        <g transform="translate(310,390)"><circle r="32" fill="var(--node-fill)" stroke="var(--node-stroke)" stroke-width="2.5"/><text class="node-label">E</text></g>
+        <g transform="translate(540,490)"><circle r="32" fill="var(--node-fill)" stroke="var(--node-stroke)" stroke-width="2.5"/><text class="node-label">F</text></g>
+      </g>
+    </svg>
+  </figure>
+
+  <div class="legend">
+    <span><span class="swatch" style="background:var(--edge-ink)"></span>frame edges (A–B–F–D square)</span>
+    <span><span class="swatch" style="background:var(--edge-accent)"></span>hub edges (into/out of C and E)</span>
+  </div>
+
+  <h2>How to draw it</h2>
+  <ol class="steps">
+    <li>Draw a square. <b>A</b> top-left, <b>B</b> top-right, <b>F</b> bottom-right, <b>D</b> bottom-left.</li>
+    <li>Connect the sides in this direction only: <b>A→B</b> (top), <b>A→D</b> (left), <b>B→F</b> (right), <b>F→D</b> (bottom).</li>
+    <li>Place <b>C</b> inside the square, upper-middle, closer to the B–F side. Draw arrows into it: <b>A→C</b>, <b>B→C</b>, <b>F→C</b>.</li>
+    <li>Place <b>E</b> inside the square, lower-middle, closer to the D–F side. Draw <b>D→E</b> and <b>C→E</b> into it, and <b>E→F</b> out of it.</li>
+    <li>That's all 10 edges, and none of them need to cross.</li>
+  </ol>
+
+  <h2>Edge list</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>From</th><th>To</th><th>Weight</th><th>Kind</th></tr></thead>
+      <tbody>
+        <tr><td>A</td><td>B</td><td class="num">2</td><td class="frame-tag">frame</td></tr>
+        <tr><td>A</td><td>C</td><td class="num">7</td><td class="hub-tag">hub</td></tr>
+        <tr><td>A</td><td>D</td><td class="num">6</td><td class="frame-tag">frame</td></tr>
+        <tr><td>B</td><td>C</td><td class="num">3</td><td class="hub-tag">hub</td></tr>
+        <tr><td>B</td><td>F</td><td class="num">1</td><td class="frame-tag">frame</td></tr>
+        <tr><td>C</td><td>E</td><td class="num">3</td><td class="hub-tag">hub</td></tr>
+        <tr><td>D</td><td>E</td><td class="num">3</td><td class="hub-tag">hub</td></tr>
+        <tr><td>E</td><td>F</td><td class="num">1</td><td class="hub-tag">hub</td></tr>
+        <tr><td>F</td><td>C</td><td class="num">3</td><td class="hub-tag">hub</td></tr>
+        <tr><td>F</td><td>D</td><td class="num">1</td><td class="frame-tag">frame</td></tr>
+      </tbody>
+    </table>
+  </div>
+</main>
